@@ -1,0 +1,152 @@
+<div class="calculator-container">
+    <h1>Marketing Spend Calculator</h1>
+    <p>See how much you can save by using Taste Tribe!</p>
+   
+    <form id="calculator-form">
+        <h2>Traditional Marketing Costs</h2>
+        <label for="hotel-cost">Hotel Expenses ($):</label>
+        <input type="number" id="hotel-cost" placeholder="Enter annual cost" required>
+
+        <label for="travel-cost">Travel Expenses ($):</label>
+        <input type="number" id="travel-cost" placeholder="Enter annual cost" required>
+
+        <label for="food-show-cost">Food Show Expenses ($):</label>
+        <input type="number" id="food-show-cost" placeholder="Enter annual cost" required>
+
+        <label for="sample-cost">Sample Costs ($):</label>
+        <input type="number" id="sample-cost" placeholder="Enter annual cost" required>
+
+        <label for="crm-cost">CRM/Marketing Tool Costs ($):</label>
+        <input type="number" id="crm-cost" placeholder="Enter annual cost" required>
+
+        <h2>Taste Tribe Costs</h2>
+        <p>Taste Tribe Base Cost: $6,000</p>
+        <label for="taste-tribe-additional">Add Additional Taste Tribe Costs ($):</label>
+        <input type="number" id="taste-tribe-additional" placeholder="Enter additional costs (e.g., travel, hotel)">
+       
+        <button type="button" id="add-line-item">Add Line Item</button>
+        <ul id="additional-line-items"></ul>
+
+        <button type="button" id="calculate-btn">Calculate Savings</button>
+    </form>
+
+    <div id="results">
+        <h2>Your Results</h2>
+        <p>Total Traditional Marketing Spend: <span id="traditional-cost">$0</span></p>
+        <p>Total Taste Tribe Cost: <span id="taste-tribe-cost">$6,000</span></p>
+        <p>Estimated Savings: <span id="savings">$0</span></p>
+    </div>
+</div>
+
+<style>
+    .calculator-container {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: auto;
+        font-family: Arial, sans-serif;
+    }
+
+    h1, h2 {
+        font-size: 20px;
+        color: #333;
+    }
+
+    label {
+        font-size: 14px;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    #results {
+        margin-top: 20px;
+        padding: 10px;
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    #results p {
+        font-size: 14px;
+        margin: 5px 0;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: #555;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const baseTasteTribeCost = 6000;
+        let tasteTribeAdditionalCosts = [];
+
+        // Add a line item to Taste Tribe additional costs
+        document.getElementById("add-line-item").addEventListener("click", function () {
+            const cost = parseFloat(document.getElementById("taste-tribe-additional").value) || 0;
+            if (cost > 0) {
+                tasteTribeAdditionalCosts.push(cost);
+                const listItem = document.createElement("li");
+                listItem.textContent = `Additional Cost: $${cost.toFixed(2)}`;
+                document.getElementById("additional-line-items").appendChild(listItem);
+                document.getElementById("taste-tribe-additional").value = ""; // Clear input
+            }
+        });
+
+        // Calculate and display results
+        document.getElementById("calculate-btn").addEventListener("click", function () {
+            // Get traditional marketing costs
+            const hotelCost = parseFloat(document.getElementById("hotel-cost").value) || 0;
+            const travelCost = parseFloat(document.getElementById("travel-cost").value) || 0;
+            const foodShowCost = parseFloat(document.getElementById("food-show-cost").value) || 0;
+            const sampleCost = parseFloat(document.getElementById("sample-cost").value) || 0;
+            const crmCost = parseFloat(document.getElementById("crm-cost").value) || 0;
+
+            const traditionalCost = hotelCost + travelCost + foodShowCost + sampleCost + crmCost;
+
+            // Calculate Taste Tribe total cost
+            const additionalCostSum = tasteTribeAdditionalCosts.reduce((sum, cost) => sum + cost, 0);
+            const tasteTribeCost = baseTasteTribeCost + additionalCostSum;
+
+            // Calculate savings
+            const savings = traditionalCost - tasteTribeCost;
+
+            // Display results
+            document.getElementById("traditional-cost").textContent = `$${traditionalCost.toFixed(2)}`;
+            document.getElementById("taste-tribe-cost").textContent = `$${tasteTribeCost.toFixed(2)}`;
+            document.getElementById("savings").textContent = `$${savings.toFixed(2)}`;
+            document.getElementById("results").style.display = "block";
+        });
+    });
+</script>
